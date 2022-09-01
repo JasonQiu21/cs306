@@ -4,6 +4,7 @@
 # 2022-09-01
 
 def extended_euclid_fronthalf(a, b):
+    """Euclidian algorithm -- doesn't give coefficients, just first step"""
     if b%a:
         print(f"{b%a} =  {b} - {b//a}*{a}")
         extended_euclid_fronthalf(b%a, a)
