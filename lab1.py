@@ -14,8 +14,13 @@ def extended_euclid(a, b):
     """Implementation of gcd using Euler's Extended Algorithm. 
     Returns GCD g coefficients x and y of linear combination xa + yb"""
     if a == 0:
+        # Base case: gcd(0, b) = b = n*0 + 1*b for all n
         return (b, 0, 1)
     else:
+        # Recursive case: gcd(a,b) = gcd(b%a, a) (remember, b = b%a + n*a for some n = b//a (// is integer divide)
+        # then,
+        # gcd(a,b) = gcd(b%a, a) = y*b%a + x*b 
+        # = y*(b-(b//a)*a) + x*b = y*b-y*(b//a)*a + x*a = y*b + (x-(b//a)*y)*a
         g, y, x = extended_euclid(b % a, a)
         if y:
             print(f"{g} = {x - (b // a) * y}*{a} + {y}*{b}")
