@@ -10,7 +10,7 @@ def extended_euclid_fronthalf(a, b):
         extended_euclid_fronthalf(b%a, a)
 
 
-def extended_euclid(a, b):
+def extended_euclid(a, b, print_steps=True):
     """Implementation of gcd using Euler's Extended Algorithm. 
     Returns GCD g coefficients x and y of linear combination xa + yb"""
     if a == 0:
@@ -21,8 +21,8 @@ def extended_euclid(a, b):
         # then,
         # gcd(a,b) = gcd(b%a, a) = y*b%a + x*b 
         # = y*(b-(b//a)*a) + x*b = y*b-y*(b//a)*a + x*a = y*b + (x-(b//a)*y)*a
-        g, y, x = extended_euclid(b % a, a)
-        if y:
+        g, y, x = extended_euclid(b % a, a, print_steps)
+        if y and print_steps:
             print(f"{g} = {x - (b // a) * y}*{a} + {y}*{b}")
         return (g, x - (b // a) * y, y)
 
@@ -30,21 +30,19 @@ def gcd(a, b):
     extended_euclid_fronthalf(a, b)
     print("\n")
     g, x, y = extended_euclid(a, b)
-    print(g)
-    print("\n")
     return g
 
 def mod_inv(a, b):
     """Modular inverse of a mod b"""
-    g, x, y = extended_euclid(a, b)
+    g, x, y = extended_euclid(a, b, print_steps=False)
     # gcd(a, b) = x*a + y*b = 1 ==> x*a = 1 (mod b) ==> a^-1 = x (mod b)
     if g != 1:
         raise Exception("Modular inverse does not exist")
     else:
         return x%b
 
-gcd(23, 30)
+print(gcd(23, 30))
 print(f"mod inv: {mod_inv(23, 30)}")
 print("\n")
-gcd(1237, 56789)
+print(gcd(1237, 56789))
 print(f"mod inv: {mod_inv(1237, 56789)}")
