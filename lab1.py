@@ -42,5 +42,9 @@ def mod_inv(a, b):
         raise Exception("Modular inverse does not exist")
     else:
         return x%b
-gcd(21, 30)
-gcd(1234, 56789)
+
+gcd(23, 30)
+print(f"mod inv: {mod_inv(23, 30)}")
+print("\n")
+gcd(1237, 56789)
+print(f"mod inv: {mod_inv(1237, 56789)}")
