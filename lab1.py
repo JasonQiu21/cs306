@@ -27,9 +27,20 @@ def extended_euclid(a, b):
         return (g, x - (b // a) * y, y)
 
 def gcd(a, b):
+    extended_euclid_fronthalf(a, b)
+    print("\n")
     g, x, y = extended_euclid(a, b)
+    print(g)
+    print("\n")
     return g
 
-extended_euclid_fronthalf(21, 30)
-print("\n")
-print(gcd(21, 30))
+def mod_inv(a, b):
+    """Modular inverse of a mod b"""
+    g, x, y = extended_euclid(a, b)
+    # gcd(a, b) = x*a + y*b = 1 ==> x*a = 1 (mod b) ==> a^-1 = x (mod b)
+    if g != 1:
+        raise Exception("Modular inverse does not exist")
+    else:
+        return x%b
+gcd(21, 30)
+gcd(1234, 56789)
