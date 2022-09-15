@@ -23,6 +23,7 @@ def no_memo_pow(a, b, m):
     else:
         return (fast_pow(a, b//2, m) * fast_pow(a, b//2, m))%m
 
-print(no_memo_pow(20, 2001, 33))
-print(fast_pow(20, 2001, 33))
-print(pow(20, 2001, 33))
+if __name__ == '__main__':
+    print(no_memo_pow(20, 2001, 33))
+    print(fast_pow(20, 2001, 33))
+    print(pow(20, 2001, 33))
