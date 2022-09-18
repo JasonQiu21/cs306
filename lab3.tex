@@ -1,0 +1,140 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\setlength{\parindent}{0pt}
+\usepackage[margin=1in]{geometry}
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=Python,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=false,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=3
+}
+\begin{document}
+
+Jason Qiu
+
+CS 306 Lab $\#3$ Writeup
+
+\emph{I pledge my honor that I have abided by the Stevens Honor System.}
+
+In Lab 2, we discussed a divide-and-conquer method for computing modular exponentiation. The process is as follows:
+\begin{equation*}
+a^b \mod N = 
+\begin{cases}
+	a \mod N, & a = 1\\
+	(a^{b/2} \mod N) \cdot (a^{b/2} \mod N) \mod N, & a = 0 \mod 2\\
+	(a \mod N)(a^{b/2} \mod N) \cdot (a^{b/2} \mod N) \mod N, & a = 1 \mod 2
+\end{cases}
+\end{equation*}
+
+Here is an implementation of the above function in Python:
+
+\begin{lstlisting}
+#lab2.py
+memo = {}
+
+def fast_pow(a, b, m):
+    """Compute a^b mod m"""
+    if (a, b, m) in memo:
+        return memo[(a, b, m)]
+    elif b == 1:
+        memo[(a, b, m)] = a%m
+        return memo[(a, b, m)]
+    elif b%2:
+        memo[(a, b, m)] = (a%m * fast_pow(a, b//2, m) * fast_pow(a, b//2, m))%m
+        return memo[(a, b, m)]
+    else:
+        memo[(a, b, m)] = (fast_pow(a, b//2, m) * fast_pow(a, b//2, m))%m
+        return memo[(a, b, m)]
+
+# Version with no memoization
+def no_memo_pow(a, b, m):
+    """Compute a^b mod m"""
+    if b == 1:
+        return a%m
+    elif b%2:
+        return (a%m * no_memo_pow(a, b//2, m) * no_memo_pow(a, b//2, m))%m
+    else:
+        return (no_memo_pow(a, b//2, m) * no_memo_pow(a, b//2, m))%m
+
+if __name__ == '__main__':
+	# Prints just to test if functions work
+    print(no_memo_pow(20, 2001, 33))
+    print(fast_pow(20, 2001, 33))
+    print(pow(20, 2001, 33))
+\end{lstlisting}
+
+Because each recursive step reduces the exponent by half, this algorithm is bounded by $\mathcal{O}(\log_2(n))$. However, each step produces about double the recursive calls than the previous, so without memoization the function is actually much slower.
+\newpage
+In Lab 3, we discussed a more efficient precomputation algorithm. The exponent of $a^b \mod N$ can be rewritten as the $i$-bit binary number $\sum_{0}^{i-1}b_i2^i$, where $b_i$ is the $i$-th digit. Then, the entire exponent can be written as follows:
+$$ a^b = a^{\sum_{0}^{i-1}b_i2^i} = \prod_{0}^{i-1} a^{b_i2^i} \mod N$$
+Using the fact that $a^{2^i} = a^{2 \cdot 2^{i-1}} = (a^{2^{i-1}})^2 =  a^{2^{i-1}} \cdot a^{2^{i-1}}$, and the fact that we only care about the final result modulo $N$, we can compute each $a^i$ using the previous quickly by squaring the previous base modulo $N$. The corresponding Python code is as follows:
+\begin{lstlisting}
+#lab3.py
+from lab2 import no_memo_pow, fast_pow # Divide-and-conquer algorithm for modular exponentiation (implemented last week)
+from random import randint
+from time import time_ns
+
+def faster_pow(a, b, m):
+    """Compute a^b mod m"""
+    result = 1
+    prev = None
+    x_i = a%m # x_0 = a%m
+    for i in range(len(bin(b)) - 2): # Because bin returns string '0b{binary number}', we subtract the two characters from it
+        if bool((b&(2**i))): # Get the ith bit from left
+            result *= x_i
+        prev = x_i
+        x_i = (prev**2)%m # In general, x_i = x_{i-1}^2 (mod m)
+    return result%m
+
+if __name__ == '__main__':
+    N = 100003
+    # Generate two random ints such that 2^31 <= a,b < 2^32
+    a = randint(2**31, 2**32-1)
+    b = randint(2**31, 2**32-1)
+
+    print(f"a = {a}\nb = {b}")
+
+    for k, v in {'built-in':pow, 'precomputation': faster_pow, 'memoized divide-and-conque': fast_pow, 'divide-and-conquer': no_memo_pow}.items():
+        print(f"Using {k} algorithm for modular exponentiation.", end="")
+        try:
+            start = time_ns()
+            built_in = v(a, b, N)
+            end = time_ns()
+            print(f" Result: {built_in}. Time elapsed: {end-start} ns")
+        except RecursionError:
+            print(f" Result: recurtionError. Time elapsed: [N/A] ns")
+\end{lstlisting}
+This algorithm only needs to iterate a number of times equal to $b$'s length, meaning it's bounded by $\mathcal{O}(\log_2(n))$ as well. However, it doesn't need to make redundant calls and is therefore faster than \verb|fast_pow|. \verb|lab3.py| also contains code to compare the speed of each method, alongside the default Python method. Example terminal output:
+\lstset{language=bash, keywordstyle=\color{black}}
+\begin{lstlisting}
+a = 2416233291
+b = 2834537968
+Using built-in algorithm for modular exponentiation. Result: 41324. Time elapsed: 35331 ns
+Using precomputation algorithm for modular exponentiation. Result: 41324. Time elapsed: 35038 ns
+Using memoized divide-and-conque algorithm for modular exponentiation. Result: 41324. Time elapsed: 136252 ns
+Using divide-and-conquer algorithm for modular exponentiation. Result: 41324. Time elapsed: 632306732373 ns
+\end{lstlisting}
+Evidently, precomputation is relaively quicker than the other two algorithms, and non-memoized divide-and-conquer is much, much slower than the other two algorithms.
+\end{document}
