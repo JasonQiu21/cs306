@@ -35,4 +35,4 @@ if __name__ == '__main__':
             end = time_ns()
             print(f" Result: {built_in}. Time elapsed: {end-start} ns")
         except RecursionError:
-            print(f" Result: recurtionError. Time elapsed: [N/A] ns")
+            print(f" Result: recursionError. Time elapsed: [N/A] ns")
