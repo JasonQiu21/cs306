@@ -3,7 +3,7 @@
 # Jason Qiu
 # 2022-09-21
 
-from lab2 import no_memo_pow, fast_pow # Divide-and-conquer algorithm for modular exponentiation (implemented last week)
+from lab2 import no_memo_pow, fast_pow, bad_pow # Divide-and-conquer algorithm for modular exponentiation (implemented last week)
 from random import randint
 from time import time_ns
 
@@ -27,7 +27,7 @@ if __name__ == '__main__':
 
     print(f"a = {a}\nb = {b}")
 
-    for k, v in {'built-in':pow, 'precomputation': faster_pow, 'memoized divide-and-conque': fast_pow, 'divide-and-conquer': no_memo_pow}.items():
+    for k, v in {'built-in':pow, 'precomputation': faster_pow, 'memoized divide-and-conquer': fast_pow, 'divide-and-conquer': no_memo_pow, 'iterative': bad_pow}.items():
         print(f"Using {k} algorithm for modular exponentiation.", end="")
         try:
             start = time_ns()

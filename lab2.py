@@ -3,6 +3,13 @@
 # Jason Qiu
 # 2022-09-21
 
+def bad_pow(a,b,m):
+    """compute a^b mod m"""
+    result = 1
+    for i in range(b):
+        result = (result * a)%m
+    return result
+
 memo = {}
 
 def fast_pow(a, b, m):
@@ -30,6 +37,7 @@ def no_memo_pow(a, b, m):
         return (no_memo_pow(a, b//2, m) * no_memo_pow(a, b//2, m))%m
 
 if __name__ == '__main__':
+    print(bad_pow(20, 2001, 33))
     print(no_memo_pow(20, 2001, 33))
     print(fast_pow(20, 2001, 33))
     print(pow(20, 2001, 33))
