@@ -54,7 +54,10 @@ if __name__ == '__main__':
     with open("public.json", "r") as f:
         public_values = json.load(f)
 
+    p = public_values["P"]
+    q = public_values["Q"]
     g = find_generator(p, q)
+
     public_values["g"] = g
     with open("public.json", "w") as f:
         json.dump(public_values, f)
@@ -62,7 +65,7 @@ if __name__ == '__main__':
     # Diffie-Hellman Stuff
     for k, v in public_values.items():
         print(f"{k} = {v}")
-    
+
     a = randint(0, q)
     b = randint(0, q)
     print(f"Alice's key a = {a}\nBob's key b = {b}")
