@@ -11,7 +11,7 @@ def extended_euclid_fronthalf(a, b):
 
 
 def extended_euclid(a, b, print_steps=True):
-    """Implementation of gcd using Euler's Extended Algorithm. 
+    """Implementation of gcd using Euclid's Extended Algorithm. 
     Returns GCD g coefficients x and y of linear combination xa + yb"""
     if a == 0:
         # Base case: gcd(0, b) = b = n*0 + 1*b for all n
