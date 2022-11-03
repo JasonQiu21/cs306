@@ -100,6 +100,7 @@ if __name__ == '__main__':
     digest_60_decrypted = pow(digest_60_signed, public[0], public[1])
     print(f"digest decrypted: {hex(digest_60_decrypted)}")
     assert bin(digest_60_decrypted) == digest_60_receiever, "Expected: valid signed message's decrypted signature matches digest of message. Received: Mismatch between signatures"
+    print("Signature and hash of message match, message is verified.")
 
     print("--------------------------------------------------Altered Message Verification--------------------------------------------------")
     altered_message = "According to all known laws of aviation, bees should be able to fly."
@@ -112,6 +113,7 @@ if __name__ == '__main__':
     digest_60_decrypted = pow(digest_60_signed, public[0], public[1])
     print(f"digest decrypted: {hex(digest_60_decrypted)}")
     assert bin(digest_60_decrypted) != digest_60_receiever, "Expected: invalid message's decrypted signature does not match digest of message. Received: Match between digests"
+    print("Signature and hash of message are different, reject signature")
 
     print("--------------------------------------------------Altered Message Verification--------------------------------------------------")
     altered_digest_60_signed = int(bin(digest_60_signed)[:-1] + ('1' if bin(digest_60_signed)[-1] == '0' else '0'), 2) # Flip last bit
@@ -124,6 +126,7 @@ if __name__ == '__main__':
     digest_60_decrypted = pow(altered_digest_60_signed, public[0], public[1])
     print(f"digest decrypted: {hex(digest_60_decrypted)}")
     assert bin(digest_60_decrypted) != digest_60_receiever, "Expected: invalid message's decrypted signature does not match digest of message. Received: Match between digests"
+    print("Signature and hash of message are different, reject signature")
 
 
     
