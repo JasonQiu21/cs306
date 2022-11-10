@@ -84,7 +84,7 @@ if __name__ == '__main__':
     digest_60 = bin(int(hashlib.sha256(message.encode('utf-8')).hexdigest(), 16))[:62] # :62 b/c of the characters '0b' at the prepended with bin
 
     print(f"Message: {message}")
-    print(f"SHA256 digest (first 60 bits): {digest_60}") # 60 bits b/c small N (only 2^64)
+    print(f"SHA256 digest (first 60 bits): {digest_60} = {hex(int(digest_60, 2))}") # 60 bits b/c small N (only 2^64)
 
     digest_60_signed = pow(int(digest_60, 2), private[0], public[1])
     print(f"digest signed: {hex(digest_60_signed)}")
@@ -92,9 +92,9 @@ if __name__ == '__main__':
     # Verifying
     print("--------------------------------------------------Valid Message and Signature Verification--------------------------------------------------")
 
-    print(f"Received message {message}")
+    print(f"Received message: {message}")
     digest_60_receiever = bin(int(hashlib.sha256(message.encode('utf-8')).hexdigest(), 16))[:62] # :62 b/c of the characters '0b' at the prepended with bin
-    print(f"SHA256 digest (first 60 bits): {digest_60_receiever}")
+    print(f"SHA256 digest (first 60 bits): {digest_60_receiever} = {hex(int(digest_60_receiever, 2))}")
 
     print(f"Received signature {digest_60_signed}")
     digest_60_decrypted = pow(digest_60_signed, public[0], public[1])
@@ -105,9 +105,9 @@ if __name__ == '__main__':
     print("--------------------------------------------------Altered Message Verification--------------------------------------------------")
     altered_message = "According to all known laws of aviation, bees should be able to fly."
 
-    print(f"Received message {altered_message}")
+    print(f"Received message: {altered_message}")
     digest_60_receiever = bin(int(hashlib.sha256(altered_message.encode('utf-8')).hexdigest(), 16))[:62] # :62 b/c of the characters '0b' at the prepended with bin
-    print(f"SHA256 digest (first 60 bits): {digest_60_receiever}")
+    print(f"SHA256 digest (first 60 bits): {digest_60_receiever} = {hex(int(digest_60_receiever, 2))}")
 
     print(f"Received signature {digest_60_signed}")
     digest_60_decrypted = pow(digest_60_signed, public[0], public[1])
@@ -118,9 +118,9 @@ if __name__ == '__main__':
     print("--------------------------------------------------Altered Message Verification--------------------------------------------------")
     altered_digest_60_signed = int(bin(digest_60_signed)[:-1] + ('1' if bin(digest_60_signed)[-1] == '0' else '0'), 2) # Flip last bit
 
-    print(f"Received message {message}")
+    print(f"Received message: {message}")
     digest_60_receiever = bin(int(hashlib.sha256(message.encode('utf-8')).hexdigest(), 16))[:62] # :62 b/c of the characters '0b' at the prepended with bin
-    print(f"SHA256 digest (first 60 bits): {digest_60_receiever}")
+    print(f"SHA256 digest (first 60 bits): {digest_60_receiever} = {hex(int(digest_60_receiever, 2))}")
 
     print(f"Received signature {altered_digest_60_signed}")
     digest_60_decrypted = pow(altered_digest_60_signed, public[0], public[1])
