@@ -96,7 +96,7 @@ if __name__ == '__main__':
     digest_60_receiever = bin(int(hashlib.sha256(message.encode('utf-8')).hexdigest(), 16))[:62] # :62 b/c of the characters '0b' at the prepended with bin
     print(f"SHA256 digest (first 60 bits): {digest_60_receiever} = {hex(int(digest_60_receiever, 2))}")
 
-    print(f"Received signature {digest_60_signed}")
+    print(f"Received signature {hex(digest_60_signed)}")
     digest_60_decrypted = pow(digest_60_signed, public[0], public[1])
     print(f"digest decrypted: {hex(digest_60_decrypted)}")
     assert bin(digest_60_decrypted) == digest_60_receiever, "Expected: valid signed message's decrypted signature matches digest of message. Received: Mismatch between signatures"
@@ -109,7 +109,7 @@ if __name__ == '__main__':
     digest_60_receiever = bin(int(hashlib.sha256(altered_message.encode('utf-8')).hexdigest(), 16))[:62] # :62 b/c of the characters '0b' at the prepended with bin
     print(f"SHA256 digest (first 60 bits): {digest_60_receiever} = {hex(int(digest_60_receiever, 2))}")
 
-    print(f"Received signature {digest_60_signed}")
+    print(f"Received signature {hex(digest_60_signed)}")
     digest_60_decrypted = pow(digest_60_signed, public[0], public[1])
     print(f"digest decrypted: {hex(digest_60_decrypted)}")
     assert bin(digest_60_decrypted) != digest_60_receiever, "Expected: invalid message's decrypted signature does not match digest of message. Received: Match between digests"
@@ -122,7 +122,7 @@ if __name__ == '__main__':
     digest_60_receiever = bin(int(hashlib.sha256(message.encode('utf-8')).hexdigest(), 16))[:62] # :62 b/c of the characters '0b' at the prepended with bin
     print(f"SHA256 digest (first 60 bits): {digest_60_receiever} = {hex(int(digest_60_receiever, 2))}")
 
-    print(f"Received signature {altered_digest_60_signed}")
+    print(f"Received signature {hex(altered_digest_60_signed)}")
     digest_60_decrypted = pow(altered_digest_60_signed, public[0], public[1])
     print(f"digest decrypted: {hex(digest_60_decrypted)}")
     assert bin(digest_60_decrypted) != digest_60_receiever, "Expected: invalid message's decrypted signature does not match digest of message. Received: Match between digests"
